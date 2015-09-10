@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /var/bigdogsoffroad
+cd /var/www
 git pull origin master
