@@ -375,6 +375,8 @@ target = link.substr(link.indexOf(' target=') + 8);
 link = link.substr(0, link.indexOf(' target='));
 }
 buffer += (isVertical && i > 1) ? '<tr><td>' : '<td>';
+if(!isImageMenu)
+buffer += '<style type="text/css"> ' + '.' + imageName + ' span {' + 'display:block; padding:' + rollOverButton[1] + '} ' + '.' + imageName + 'Hover span {' + 'display:block; padding:' + rollOverButton[3] + '}' + '</style>';
 var cursor = link != 'javascript:void(0)' ? 'hand' : 'default';
 buffer += '<a class="nof-navPositioning" ';
 if (cursor == 'default')
@@ -411,8 +413,8 @@ buffer+= ' style="' + rollOverButton[0] +'"';
 }
 }
 buffer += isImageMenu ? '></a></td>' :
-'><' + browser.getLayerTag() + ' id="' + imageName + '_padding" style="padding:' + rollOverButton[1] + '" padding="' + rollOverButton[1] + '" paddingOver="' + rollOverButton[3] + '">' + image +
-'</' + browser.getLayerTag() + '></' + browser.getLayerTag() + '></a></td>';
+'><span id="' + imageName + '_padding"' + '>' + image +
+'</span></' + browser.getLayerTag() + '></a></td>';
 buffer += isVertical ? "</tr>" : "";
 i++;
 }
@@ -475,11 +477,6 @@ rollOver.src = eval(imageRollSrcString) ? eval(imageRollSrcString) : "";
 } else if (menuType == CONSTANTS.MENU_TYPE_TEXT){
 if (typeof(buttonName) == "string") {
 browser.getItem(buttonName).className = isOver ? buttonName + "Hover" : buttonName;
-if (browser.getItem(buttonName + "_padding")){
-browser.getItem(buttonName + "_padding").style.padding = isOver ?
-browser.getItem(buttonName + "_padding").paddingOver :
-browser.getItem(buttonName + "_padding").padding;
-}
 if (typeof(browser.getItem(buttonName).style) != "undefined")
 browser.getItem(buttonName).style.cssText = isOver ?
 GLOBAL_LoadedImages[buttonName + "Over"] :
@@ -639,6 +636,7 @@ var items = this.toArray();
 clearTimeout(GLOBAL_Close);
 for (var i = items.length - 1; i >= 0; i--)
 if ( items[i] != null && items[i] != "" ) {
+if(!isNaN(items[i]))
 clearTimeout(items[i]);
 browser.hideMenuItem(items[i]);
 }
